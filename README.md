@@ -26,6 +26,7 @@ A practical data-processing tool to clean, validate, and check phone numbers for
 - ✅ **WhatsApp check**: Three modes (API, mock, estimated)
 - ✅ **Batch processing**: Handles thousands of numbers efficiently
 - ✅ **Robust error handling**: Never crashes on bad data
+- ✅ **Client-ready output**: Simplified delivery file plus technical detail file
 - ✅ **Detailed logging**: Track processing stats and errors
 - ✅ **Configurable**: YAML config + CLI options + env vars
 
@@ -272,12 +273,25 @@ Same structure as CSV, saved as .xlsx
 
 ### Output Format
 
+The tool now generates two outputs:
+
+- **Technical output**: full validation fields for internal review/debugging
+- **Client output**: simplified columns for delivery
+
 **CSV:**
 ```csv
 original_number,cleaned_number,e164_number,validity_status,whatsapp_status,country_code,parse_status,error_message
 +1 415-555-1234,+14155551234,+14155551234,valid,no,+1,success,
 18823880046,18823880046,+18823880046,invalid,no,+1,invalid_format,Number is possible but not valid (incorrect length or format)
 ,,,unparseable,unknown,,empty,Empty or null phone number
+```
+
+**Client CSV:**
+```csv
+original_number,cleaned_number,validity_status,whatsapp_status
++1 415-555-1234,+14155551234,valid,no
+18823880046,18823880046,invalid,no
+,,,unparseable,unknown
 ```
 
 ### Processing Pipeline

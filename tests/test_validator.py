@@ -479,6 +479,44 @@ class TestDataExporter:
 
         assert fmt == "xlsx"
 
+    def test_export_creates_client_csv_and_preserves_text_fields(self):
+        """Test CSV export creates a client file and keeps phone-like values as text."""
+        from src.result_aggregator import AggregatedResult
+
+        config = Config()
+        exporter = DataExporter(config)
+
+        results = [
+            AggregatedResult(
+                original_number="+1 415-555-1234",
+                cleaned_number="+14155551234",
+                e164_number="+14155551234",
+                country_code="+1",
+                parse_status="success",
+                validity_status="valid",
+                whatsapp_status="unknown",
+                error_message=None
+            )
+        ]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_path = os.path.join(tmpdir, "results.csv")
+            exporter.export(results, output_path)
+
+            client_path = os.path.join(tmpdir, "results_client.csv")
+            assert os.path.exists(output_path)
+            assert os.path.exists(client_path)
+
+            with open(output_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            with open(client_path, "r", encoding="utf-8") as f:
+                client_content = f.read()
+
+            assert "+14155551234" in content
+            assert "1.415555e+10" not in content
+            assert "original_number,cleaned_number,validity_status,whatsapp_status" in client_content
+
 
 # Run tests
 if __name__ == "__main__":
