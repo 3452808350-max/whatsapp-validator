@@ -1,0 +1,51 @@
+# WhatsApp Number Validation Tool - Configuration Example
+# Copy this file to config.yaml and customize as needed
+
+input:
+  # Input file path
+  path: "data/input.csv"
+  # File format: csv or xlsx
+  format: "csv"
+  # Name of the phone number column in your input file
+  phone_column: "phone"
+
+output:
+  # Output file path
+  path: "data/output.csv"
+  # Output format: csv or xlsx
+  format: "csv"
+
+validation:
+  # Default country code for phone number parsing (ISO 3166-1 alpha-2)
+  # Examples: US, CN, GB, DE, FR, JP, etc.
+  default_country: "US"
+  # Strict mode: reject numbers without country code
+  strict_mode: false
+
+whatsapp:
+  # WhatsApp check mode:
+  # - api: Use third-party API for true lookup
+  # - mock: Return mock results (for testing)
+  # - estimated: Estimate based on phone validity only
+  mode: "mock"
+  
+  # API configuration (only needed for api mode)
+  api_endpoint: ""
+  api_key: ""
+  timeout: 10
+  retry_count: 3
+  retry_delay: 1.0
+
+rate_limit:
+  # Maximum API requests per second
+  requests_per_second: 5.0
+  # Burst limit for rate limiting
+  burst_limit: 10
+
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  # Log file path (optional)
+  file: "logs/validator.log"
+  # Enable console output
+  console: true
