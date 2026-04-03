@@ -36,7 +36,7 @@ A practical data-processing tool to clean, validate, and check phone numbers for
 pip install -r requirements.txt
 
 # Basic usage
-python -m src input.csv output.csv
+python __main__.py input.csv output.csv
 
 # Or using the CLI
 wa-validator input.csv output.csv --country US
@@ -75,22 +75,22 @@ pip install -e .
 
 ```bash
 # Basic validation
-python -m src input.csv output.csv
+python __main__.py input.csv output.csv
 
 # Specify country code
-python -m src input.csv output.csv --country CN
+python __main__.py input.csv output.csv --country CN
 
 # Use API mode for WhatsApp check
-python -m src input.csv output.csv --mode api --api-endpoint https://api.example.com/check --api-key YOUR_KEY
+python __main__.py input.csv output.csv --mode api --api-endpoint https://api.example.com/check --api-key YOUR_KEY
 
 # Excel input/output
-python -m src input.xlsx output.xlsx --format xlsx
+python __main__.py input.xlsx output.xlsx --output-format xlsx
 
 # Use configuration file
-python -m src --config config.yaml
+python __main__.py --config config.yaml
 
 # Advanced options
-python -m src input.csv output.csv \
+python __main__.py input.csv output.csv \
   --country US \
   --mode mock \
   --rate-limit 10 \
@@ -274,10 +274,10 @@ Same structure as CSV, saved as .xlsx
 
 **CSV:**
 ```csv
-original_number,cleaned_number,e164_number,validity_status,whatsapp_status,country_code,error_message
-+1 415-555-1234,+14155551234,+14155551234,valid,unknown,+1,
-18823880046,+8618823880046,+8618823880046,valid,unknown,+86,
-0755-12345678,075512345678,,invalid,no,,Invalid phone number format
+original_number,cleaned_number,e164_number,validity_status,whatsapp_status,country_code,parse_status,error_message
++1 415-555-1234,+14155551234,+14155551234,valid,no,+1,success,
+18823880046,18823880046,+18823880046,invalid,no,+1,invalid_format,Number is possible but not valid (incorrect length or format)
+,,,unparseable,unknown,,empty,Empty or null phone number
 ```
 
 ### Processing Pipeline
@@ -328,19 +328,19 @@ summary = stats.finish()
 ### Run All Tests
 
 ```bash
-pytest tests/ -v
+.venv/bin/python -m pytest -q tests test_quick.py test_comprehensive.py
 ```
 
 ### Run Specific Tests
 
 ```bash
-pytest tests/test_validator.py::TestPhoneValidator -v
+.venv/bin/python -m pytest tests/test_validator.py::TestPhoneValidator -v
 ```
 
 ### Test Coverage
 
 ```bash
-pytest tests/ --cov=src --cov-report=html
+.venv/bin/python -m pytest tests/ --cov=src --cov-report=html
 ```
 
 ## 🏗 Architecture

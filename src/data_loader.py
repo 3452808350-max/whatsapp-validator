@@ -129,7 +129,12 @@ class DataLoader:
         
         for encoding in encodings:
             try:
-                df = pd.read_csv(path, encoding=encoding, dtype=str)
+                df = pd.read_csv(
+                    path,
+                    encoding=encoding,
+                    dtype=str,
+                    keep_default_na=False
+                )
                 logger.debug(f"Successfully loaded CSV with encoding: {encoding}")
                 return df
             except UnicodeDecodeError:
@@ -143,7 +148,12 @@ class DataLoader:
     def _load_excel(self, path: str) -> pd.DataFrame:
         """Load Excel file."""
         try:
-            df = pd.read_excel(path, dtype=str, engine='openpyxl')
+            df = pd.read_excel(
+                path,
+                dtype=str,
+                engine='openpyxl',
+                keep_default_na=False
+            )
             return df
         except Exception as e:
             logger.error(f"Error loading Excel: {e}")
